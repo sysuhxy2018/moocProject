@@ -63,6 +63,37 @@ public class PersonInfo {
 
 这里用Integer而不是int，主要是考虑到数据库方面可能有null值，这里用包装类的话也可以表示null值，保持一致。
 
+另外，这里出现了表与表之间通过主外键关联的情况，应该如何设置？
+
+首先，在实体类中包含关联类的对象：
+
+### LocalAuth.java
+
+``` java
+private PersonInfo personInfo;
+```
+
+然后对应表中添加关联属性并引入外键约束：
+
+``` mysql
+constraint fk_localauth_profile foreign key(user_id) references tb_person_info(user_id)
+```
+
+另外补充一下唯一键（索引）的两种设置方式：
+
+``` mysql
+unique key uk_local_profile (username) # 在create时添加
+
+alter table tb_wechat_auth modify open_id varchar(512) not null;
+alter table tb_wechat_auth add unique index(open_id); # create完成后修改
+```
+
+最后说一下可能遇到的坑：
+
+### MySQL提示key的大小不能超过3072字节
+
+原因是一开始设置open_id为varchar(1024)，字符集为utf8mb4，那么MySQL会按最大标准来分配内存，也就是1024 * 4 = 4096字节。很明显超标了，所以要么改字符集为utf8(mb3)，要么将varchar改小成512等。
+
 
 
 
