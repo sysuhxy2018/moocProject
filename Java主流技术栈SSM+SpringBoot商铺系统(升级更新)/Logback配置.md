@@ -110,3 +110,4 @@ logger.info("===end===");
 最后可以在控制台看到打印的信息，另外在tomcat根目录下指定的位置也能看到保存的.log文件。
 
 <img src="screenshots/chapter3/logger.png" style="margin-left:0;" />
+
